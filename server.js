@@ -13,7 +13,8 @@ const corsOptions = {
         const allowedOrigins = [
             'http://localhost:3000',
             'http://localhost:3001',
-            'https://crime-incidence-frontend.onrender.com'
+            'https://crime-incidence-frontend.onrender.com',
+            'https://crime-incidence-tlatelolco.netlify.app'
         ];
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
