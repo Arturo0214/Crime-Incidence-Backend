@@ -18,6 +18,14 @@ const agreementSchema = new mongoose.Schema({
         enum: ['pendiente', 'en_progreso', 'completado', 'cancelado', 'informacion'],
         default: 'pendiente'
     },
+    responsible: {
+        type: String,
+        required: true
+    },
+    dueDate: {
+        type: Date,
+        required: true
+    },
     assignedTo: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Participant'
@@ -25,9 +33,6 @@ const agreementSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },
-    dueDate: {
-        type: Date
     },
     priority: {
         type: String,
@@ -51,5 +56,7 @@ const agreementSchema = new mongoose.Schema({
 // Índices para búsquedas comunes
 agreementSchema.index({ status: 1, date: -1 });
 agreementSchema.index({ assignedTo: 1 });
+agreementSchema.index({ responsible: 1 });
+agreementSchema.index({ dueDate: 1 });
 
 module.exports = mongoose.model('Agreement', agreementSchema); 

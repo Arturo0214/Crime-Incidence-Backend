@@ -12,7 +12,9 @@ function adjustDateToLocalNoon(dateStr) {
 // Obtener todos los acuerdos
 exports.getAllAgreements = async (req, res) => {
     try {
-        const agreements = await Agreement.find().sort({ date: -1 });
+        const agreements = await Agreement.find()
+            .sort({ date: -1 })
+            .select('title description date status responsible dueDate priority comments');
         res.status(200).json(agreements);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -36,6 +38,9 @@ exports.createAgreement = async (req, res) => {
         if (req.body.date) {
             req.body.date = adjustDateToLocalNoon(req.body.date);
         }
+        if (req.body.dueDate) {
+            req.body.dueDate = adjustDateToLocalNoon(req.body.dueDate);
+        }
         const agreement = new Agreement(req.body);
         await agreement.save();
         res.status(201).json(agreement);
@@ -49,6 +54,9 @@ exports.updateAgreement = async (req, res) => {
     try {
         if (req.body.date) {
             req.body.date = adjustDateToLocalNoon(req.body.date);
+        }
+        if (req.body.dueDate) {
+            req.body.dueDate = adjustDateToLocalNoon(req.body.dueDate);
         }
         const agreement = await Agreement.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!agreement) return res.status(404).json({ message: 'Acuerdo no encontrado' });
@@ -72,15 +80,18 @@ exports.deleteAgreement = async (req, res) => {
 // Crear varios acuerdos a la vez
 exports.createAgreementsBulk = async (req, res) => {
     try {
-        if (Array.isArray(req.body)) {
-            req.body.forEach(agreement => {
-                if (agreement.date) {
-                    agreement.date = adjustDateToLocalNoon(agreement.date);
-                }
-            });
-        }
-        const agreements = await Agreement.insertMany(req.body);
-        res.status(201).json(agreements);
+        const agreements = req.body.map(agreement => {
+            if (agreement.date) {
+                agreement.date = adjustDateToLocalNoon(agreement.date);
+            }
+            if (agreement.dueDate) {
+                agreement.dueDate = adjustDateToLocalNoon(agreement.dueDate);
+            }
+            return agreement;
+        });
+
+        const createdAgreements = await Agreement.insertMany(agreements);
+        res.status(201).json(createdAgreements);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
