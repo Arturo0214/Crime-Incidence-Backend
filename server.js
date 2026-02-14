@@ -14,7 +14,8 @@ const corsOptions = {
             'http://localhost:3000',
             'http://localhost:3001',
             'https://crime-incidence-frontend.onrender.com',
-            'https://crime-incidence-tlatelolco.netlify.app'
+            'https://crime-incidence-tlatelolco.netlify.app',
+            'https://crime-incidence-backend-production.up.railway.app'
         ];
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
