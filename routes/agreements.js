@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const agreementController = require('../controllers/agreementController');
-const auth = require('../middleware/auth');
 
 // Obtener todos los acuerdos
 router.get('/', agreementController.getAllAgreements);
@@ -10,20 +9,20 @@ router.get('/', agreementController.getAllAgreements);
 router.get('/:id', agreementController.getAgreementById);
 
 // Crear nuevo acuerdo
-router.post('/', auth, agreementController.createAgreement);
+router.post('/', agreementController.createAgreement);
 
 // Actualizar acuerdo
-router.put('/:id', auth, agreementController.updateAgreement);
+router.put('/:id', agreementController.updateAgreement);
 
 // Eliminar acuerdo
-router.delete('/:id', auth, agreementController.deleteAgreement);
+router.delete('/:id', agreementController.deleteAgreement);
 
 // Crear varios acuerdos a la vez
-router.post('/bulk', auth, agreementController.createAgreementsBulk);
+router.post('/bulk', agreementController.createAgreementsBulk);
 
 // Comentarios en acuerdos
-router.post('/:id/comments', auth, agreementController.addCommentToAgreement);
-router.put('/:id/comments/:commentIdx', auth, agreementController.editCommentInAgreement);
-router.delete('/:id/comments/:commentIdx', auth, agreementController.deleteCommentFromAgreement);
+router.post('/:id/comments', agreementController.addCommentToAgreement);
+router.put('/:id/comments/:commentIdx', agreementController.editCommentInAgreement);
+router.delete('/:id/comments/:commentIdx', agreementController.deleteCommentFromAgreement);
 
 module.exports = router; 
